@@ -63,3 +63,38 @@ class UserLoginSerializer(serializers.ModelSerializer):
             'nickname': user.nickname,
             'token': jwt_token
         }
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        models = Image
+        fields = [
+            'id',
+            'url'
+        ]
+
+class PortfolioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Portfolio
+        fields = [
+            'id',
+            'title',
+            'introduction',
+            'numberOfRooms',
+            'floorSpace',
+            'concept',
+            'consultingRange',
+            'description',
+            'budget',
+            'pricePerUnit',
+            'images',
+            'user'
+        ]
+
+        # Nested Serializer
+        images = ImageSerializer(source='image_set', many=True, read_only=True)
+
+        # Serializer Method Field
+        user = serializers.SerializerMethodField()
+
+        def get_user(self, obj):
+            return {"nickname": obj.user.nickname}
