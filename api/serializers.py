@@ -64,6 +64,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
             'token': jwt_token
         }
 
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         models = Image
@@ -71,6 +72,7 @@ class ImageSerializer(serializers.ModelSerializer):
             'id',
             'url'
         ]
+
 
 class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
