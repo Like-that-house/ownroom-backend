@@ -78,7 +78,7 @@ JWT_AUTH = {
 CORS_ORIGIN_ALLOW_ALL = True # 모든 호스트 허용
 
 AUTHENTICATION_BACKENDS = (
-    # 'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'api.serializers.LoginBackend',
 )
 
