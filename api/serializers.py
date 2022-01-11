@@ -34,9 +34,7 @@ class LoginBackend(ModelBackend):
     def authenticate(self, request, nickname=None, password=None, **kwargs):
         try:
             user = User.objects.get(nickname=nickname)
-            print(user)
             if user.check_password(password):
-                #if user.password == password:
                 return user
             return None
 

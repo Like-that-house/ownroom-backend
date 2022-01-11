@@ -9,4 +9,5 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path('users/signup', RegisterView.as_view()),
+    path('users/login', LoginView.as_view()),
 ]
