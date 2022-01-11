@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
 from .models import *
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # JWT 사용을 위한 설정
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -18,8 +19,18 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'nickname', 'name', 'phoneNumber', 'isConsultant']
 
+    def create(self, validated_data):
+        user = User(
+            nickname=validated_data.get("nickname"),
+            name=validated_data.get("name"),
+            phoneNumber=validated_data.get("phoneNumber"),
+        )
+        user.set_password(validated_data.get("password"))
+        user.save()
+        return user
 
-class LoginBackend(ModelBackend): # 준환님 readme.md 참고. 이거 안하면 계속 userid=None 나옴..
+
+class LoginBackend(ModelBackend):
     def authenticate(self, request, nickname=None, password=None, **kwargs):
         try:
             user = User.objects.get(nickname=nickname)

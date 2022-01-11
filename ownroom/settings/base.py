@@ -60,12 +60,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',  # 모든 접근 허용
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ),
 }
-
 
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,
@@ -73,7 +72,10 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True, # jwt 갱신 여부
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), # wt 토큰 유효기간
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), # jwt 토큰 갱신 유효기간
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+APPEND_SLASH=False
 
 CORS_ORIGIN_ALLOW_ALL = True # 모든 호스트 허용
 
