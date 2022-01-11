@@ -125,6 +125,7 @@ class File(Base):
     isReport = models.BooleanField()
     url = models.TextField()
     contact = models.ForeignKey(Contact, related_name='files', on_delete=models.CASCADE)
+    filename = models.CharField(max_length=100)
 
     def __str__(self):
         return 'file_' + str(self.id)

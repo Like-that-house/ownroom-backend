@@ -7,9 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from .storages import *
-from rest_framework.filters import OrderingFilter
 
 # Create your views here.
 
@@ -29,14 +27,6 @@ class LoginView(APIView):
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class PortfolioViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    queryset = Portfolio.objects.all()
-    serializer_class = PortfolioSerializer
-    filter_backends = [DjangoFilterBackend,]
-    filter_fields = ['concept']
 
 # owner가 신청서를 보내면 contact table에 먼저 행 추가 -> file table에 신청서 url 업로드(user의 isConsultant 값에 따라 isReport 변경)
 # consultant가 보고서를 보내면 file table에 보고서 업로드(해당 user, consultant에 해당하는 contact table 참조)
