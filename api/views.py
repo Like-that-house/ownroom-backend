@@ -28,8 +28,6 @@ class LoginView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# owner가 신청서를 보내면 contact table에 먼저 행 추가 -> file table에 신청서 url 업로드(user의 isConsultant 값에 따라 isReport 변경)
-# consultant가 보고서를 보내면 file table에 보고서 업로드(해당 user, consultant에 해당하는 contact table 참조)
 
 # 컨설팅 신청서 업로드 api/consulting/application
 class ApplicatoinUploadView(APIView):
@@ -42,7 +40,8 @@ class ApplicatoinUploadView(APIView):
     def post(self, request, format=None):
         user = request.user
         file = request.FILES['file']
-        targetId = request.POST['id']  # value값 그대로 넘어옴.
+        #targetId = request.POST['id']  # value값 그대로 넘어옴.
+        targetId = request.data.get("userId")
         target = self.get_object(id=targetId)
         file_url = FileUpload(s3_client).upload(file)
 
@@ -75,7 +74,8 @@ class ReportUploadView(APIView):
     def post(self, request, format=None):
         user = request.user
         file = request.FILES['file']
-        targetId = request.POST['id']  # value값 그대로 넘어옴.
+        #targetId = request.POST['id']
+        targetId = request.data.get("userId")
         target = self.get_object(id=targetId)
         file_url = FileUpload(s3_client).upload(file)
 
@@ -101,10 +101,14 @@ class FileUploadView(APIView):
 
     def post(self, request, format=None):
         user = request.user
-        file = request.FILES['file'] # filename
-        targetId = request.POST['id'] # value값 그대로 넘어옴.
+        filename = request.FILES['file'] # filename
+        targetId = request.POST['id']
+        #targetId = request.data.get("userId")
         target = self.get_object(id=targetId)
-        file_url = FileUpload(s3_client).upload(file)
+        file_url = FileUpload(s3_client).upload(filename)
+
+        if file_url==None:
+            return Response({"message":"File upload failed"}, status=status.HTTP_400_BAD_REQUEST)
 
         if user.isConsultant:
             try:
@@ -113,22 +117,24 @@ class FileUploadView(APIView):
                 raise Http404();
 
             file = File(
-                contact = contact,
+                contact=contact,
                 url=file_url,
+                filename=filename,
                 isReport=True
             )
             file.save()
             return Response({"message": "Report file is uploaded"}, status=status.HTTP_200_OK)
         else:
             contact = Contact(
-                owner = user,
-                consultant = target
+                owner=user,
+                consultant=target
             )
             contact.save()
             file = File(
-                contact = Contact.objects.latest('id'),
-                url = file_url,
-                isReport = False
+                contact=Contact.objects.latest('id'),
+                url=file_url,
+                filename=filename,
+                isReport=False
             )
             file.save()
             return Response({"message": "Application file is uploaded"}, status=status.HTTP_200_OK)
