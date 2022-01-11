@@ -112,8 +112,8 @@ class Contact(Base):
         db_table="contact"
 
     isReported = models.BooleanField(default=False)
-    user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
-    consultant = models.ForeignKey(User, related_name='consultant', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='consultants', on_delete=models.CASCADE)
+    consultant = models.ForeignKey(User, related_name='owners', on_delete=models.CASCADE)
 
     def __str__(self):
         return 'contact_' + str(self.id) + '_from_' + str(self.user.nickname) + '_to_' + str(self.consultant.nickname)
@@ -124,7 +124,7 @@ class File(Base):
 
     isReport = models.BooleanField()
     url = models.TextField()
-    contact = models.ForeignKey(Contact, related_name='contact', on_delete=models.CASCADE)
+    contact = models.ForeignKey(Contact, related_name='files', on_delete=models.CASCADE)
 
     def __str__(self):
         return 'file_' + str(self.id)
@@ -134,7 +134,7 @@ class Image(Base):
         db_table="image"
 
     url = models.TextField()
-    portfolio = models.ForeignKey(Portfolio, related_name='portfolio', on_delete=models.CASCADE)
+    portfolio = models.ForeignKey(Portfolio, related_name='images', on_delete=models.CASCADE)
 
     def __str__(self):
         return 'image_' + str(self.id)

@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'corsheaders',
-    'django-filters',
     'storages'
 ]
 
@@ -63,7 +62,7 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 DEFAULT_FILE_STORAGE = 'config.asset_storage.S3DefaultStorage'
-STATICFILES_STORAGE = 'config.asset_storage.S3StaticStorage'
+#STATICFILES_STORAGE = 'config.asset_storage.S3StaticStorage'
 
 SITE_ID = 1
 
@@ -173,9 +172,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 # Media files
 MEDIA_URL = '/media/'

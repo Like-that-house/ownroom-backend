@@ -12,6 +12,7 @@ urlpatterns = router.urls
 urlpatterns = router.urls
 
 urlpatterns += [
-    path('test/file', views.FileUploadView.as_view()),
+    path('consulting/application', views.FileUploadView.as_view()),
+    path('consulting/report', views.FileUploadView.as_view()),
     path('users/login', views.LoginView.as_view()),
 ]
