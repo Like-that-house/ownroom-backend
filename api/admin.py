@@ -41,7 +41,7 @@ class UserChangeForm(forms.ModelForm):
 
    class Meta:
        model = User
-       fields = ('nickname', 'password', 'name', 'phoneNumber', 'is_active', 'is_admin')
+       fields = ('nickname', 'password', 'name', 'phoneNumber', 'consultantRegisterStatus', 'is_active', 'is_admin')
 
 
 class UserAdmin(BaseUserAdmin):
@@ -52,12 +52,12 @@ class UserAdmin(BaseUserAdmin):
    # The fields to be used in displaying the User model.
    # These override the definitions on the base UserAdmin
    # that reference specific fields on auth.User.
-   list_display = ('nickname', 'name', 'is_admin')
-   list_filter = ('is_admin',)
+   list_display = ('nickname', 'name', 'consultantRegisterStatus', 'is_admin', 'created_date', 'updated_date')
+   list_filter = ('is_admin','consultantRegisterStatus')
    fieldsets = (
        (None, {'fields': ('nickname', 'password')}),
-       ('Personal info', {'fields': ('name',)}),
-       ('Permissions', {'fields': ('is_admin',)}),
+       ('Personal info', {'fields': ('name','phoneNumber')}),
+       ('Permissions', {'fields': ('is_admin','consultantRegisterStatus','isConsultant')}),
    )
    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
    # overrides get_fieldsets to use this attribute when creating a user.
@@ -71,10 +71,16 @@ class UserAdmin(BaseUserAdmin):
    ordering = ('nickname',)
    filter_horizontal = ()
 
+class PortfolioAdmin(admin.ModelAdmin):
+    list_display = ('title', 'id', 'user','created_date', 'updated_date')
+    list_filter = ('user',)
+    ordering = ('created_date', 'updated_date')
+    search_fields = ('title',)
+
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-admin.site.register(Portfolio)
+admin.site.register(Portfolio, PortfolioAdmin)
 admin.site.register(Image)
 admin.site.register(File)
 admin.site.register(Contact)
