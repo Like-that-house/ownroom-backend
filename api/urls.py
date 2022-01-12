@@ -3,7 +3,8 @@ from rest_framework import routers
 from django.urls import path, include
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'portfolios', PortfoliosViewSet, basename='portfolio')
 urlpatterns = router.urls
 
 urlpatterns += [

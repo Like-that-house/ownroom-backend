@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
 # Create your views here.
 
@@ -41,3 +42,17 @@ class LoginView(APIView):
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PortfolioFilter(FilterSet):
+    concept = filters.CharFilter(field_name='concept')
+
+    class Meta:
+        model=Portfolio
+        fields=['concept']
+
+class PortfoliosViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
+    queryset = Portfolio.objects.all()
+    serializer_class = PortfolioSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PortfolioFilter

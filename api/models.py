@@ -134,7 +134,7 @@ class Image(Base):
         db_table="image"
 
     url = models.TextField()
-    portfolio = models.ForeignKey(Portfolio, related_name='images', on_delete=models.CASCADE)
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
 
     def __str__(self):
         return 'image_' + str(self.id)

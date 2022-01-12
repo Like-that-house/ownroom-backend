@@ -73,13 +73,30 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Image
+        model = Image
         fields = [
             'id',
             'url'
         ]
 
 class PortfolioSerializer(serializers.ModelSerializer):
+    # Nested Serializer
+    images = ImageSerializer(source='image_set', many=True, read_only=True)
+
+    # Serializer Method Field
+    user = serializers.SerializerMethodField()
+    concept = serializers.SerializerMethodField()
+    consultingRange = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+        return {"nickname": obj.user.nickname}
+
+    def get_concept(self, obj):
+        return obj.get_concept_display()
+
+    def get_consultingRange(self, obj):
+        return obj.get_consultingRange_display()
+
     class Meta:
         model = Portfolio
         fields = [
@@ -96,12 +113,3 @@ class PortfolioSerializer(serializers.ModelSerializer):
             'images',
             'user'
         ]
-
-        # Nested Serializer
-        images = ImageSerializer(source='image_set', many=True, read_only=True)
-
-        # Serializer Method Field
-        user = serializers.SerializerMethodField()
-
-        def get_user(self, obj):
-            return {"nickname": obj.user.nickname}
