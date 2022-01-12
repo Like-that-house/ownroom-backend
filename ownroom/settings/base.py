@@ -74,6 +74,25 @@ JWT_AUTH = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 9,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+
 APPEND_SLASH=False
 
 CORS_ORIGIN_ALLOW_ALL = True # 모든 호스트 허용

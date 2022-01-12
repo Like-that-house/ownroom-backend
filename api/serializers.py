@@ -5,7 +5,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
 from .models import *
-from django.contrib.auth.hashers import *
+from .validators import validate_phone
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 # JWT 사용을 위한 설정
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -18,6 +20,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'nickname', 'name', 'phoneNumber', 'isConsultant', 'password']
+
+    def validate(self, data):
+        password = data.get('password')
+        phoneNumber = data.get('phoneNumber')
+        if validate_password(password):
+            raise serializers.ValidationError(detail=True)
+        if not validate_phone(phoneNumber):
+            raise serializers.ValidationError("Invalid phone number")
+        return data
 
     def create(self, validated_data):
         user = User(
@@ -45,7 +56,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user = authenticate(nickname=nickname, password=password)
 
         if user is None:
-            return serializers.ValidationError(detail=True)
+            return {'nickname': 'None'}
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
             jwt_token = JWT_ENCODE_HANDLER(payload)
