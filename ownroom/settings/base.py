@@ -80,12 +80,8 @@ APPEND_SLASH=False
 CORS_ORIGIN_ALLOW_ALL = True # 모든 호스트 허용
 
 AUTHENTICATION_BACKENDS = (
-    #'django.contrib.auth.backends.ModelBackend',
-    'api.serializers.LoginBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
-
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 REST_USE_JWT = True
 ACCOUNT_LOGOUT_ON_GET = True

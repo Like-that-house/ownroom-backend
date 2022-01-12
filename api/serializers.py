@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
 from .models import *
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.hashers import *
 
 # JWT 사용을 위한 설정
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -17,7 +17,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'nickname', 'name', 'phoneNumber', 'isConsultant']
+        fields = ['id', 'nickname', 'name', 'phoneNumber', 'isConsultant', 'password']
 
     def create(self, validated_data):
         user = User(
@@ -28,19 +28,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data.get("password"))
         user.save()
         return user
-
-
-class LoginBackend(ModelBackend):
-    def authenticate(self, request, nickname=None, password=None, **kwargs):
-        try:
-            user = User.objects.get(nickname=nickname)
-            if user.check_password(password):
-                return user
-            return None
-
-        except User.DoesNotExist:
-            return None
-
 
 # 로그인
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -58,7 +45,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user = authenticate(nickname=nickname, password=password)
 
         if user is None:
-            return {'nickname': 'None'} # password가 안맞아도 해당 에러.
+            return serializers.ValidationError(detail=True)
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
             jwt_token = JWT_ENCODE_HANDLER(payload)
