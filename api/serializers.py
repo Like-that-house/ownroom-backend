@@ -56,7 +56,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user = authenticate(nickname=nickname, password=password)
 
         if user is None:
-            return {'nickname': 'None'}
+            raise serializers.ValidationError('Invalid user')
         try:
             payload = JWT_PAYLOAD_HANDLER(user)
             jwt_token = JWT_ENCODE_HANDLER(payload)
