@@ -56,6 +56,25 @@ class DuplicationCheckView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+class UserSwitchView(APIView):
+    def patch(self, request):
+        user = request.user
+        # owner->consultant. 컨설턴트 승인 완료 상태(C)인 경우에만 전환 가능
+        switchTo = request.data.get("switchTo")
+        if switchTo=='consultant':
+            if user.consultantRegisterStatus=='B' or user.consultantRegisterStatus=='R':
+                return Response({"message":"컨설턴트 승인 후 전환 가능합니다."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.isConsultant = True
+                user.save()
+                return Response({"message":"컨설턴트로 전환합니다."}, status=status.HTTP_200_OK)
+        #consultant->owner
+        else:
+            user.isConsultant = False
+            user.save()
+            return Response({"message":"고객으로 전환합니다."}, status=status.HTTP_200_OK)
+
+
 class PortfolioFilter(FilterSet):
     concept = filters.CharFilter(field_name='concept')
 
