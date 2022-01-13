@@ -12,4 +12,6 @@ urlpatterns += [
     path('users/login', LoginView.as_view()),
     path('users/check', DuplicationCheckView.as_view()),
     path('users/switch', UserSwitchView.as_view()),
+    path('consulting/application/upload', FileUploadView.as_view()),
+    path('consulting/report/upload', FileUploadView.as_view()),
 ]
