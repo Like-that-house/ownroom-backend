@@ -49,7 +49,20 @@ INSTALLED_APPS = [
     'allauth.account',
     'corsheaders',
     'django_filters',
+    'storages',
 ]
+
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = 'ap-northeast-2'
+
+# S3 Storages
+AWS_STORAGE_BUCKET_NAME = 'ownroom-bucket'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+DEFAULT_FILE_STORAGE = 'config.asset_storage.S3DefaultStorage'
 
 SITE_ID = 1
 
