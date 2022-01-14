@@ -7,8 +7,7 @@ WORKDIR /app
 # dependencies for psycopg2-binary
 RUN apk add --no-cache mariadb-connector-c-dev
 RUN apk update && apk add libpq
-RUN apk update && apk add python3 python3-dev mariadb-dev build-base && pip3 install mysqlclient
-RUN apk update && apk add gcc musl-dev python3-dev libffi-dev openssl-dev cargo
+RUN apk update && apk add python3 python3-dev mariadb-dev build-base libffi-dev && pip3 install mysqlclient
 
 
 # By copying over requirements first, we make sure that Docker will cache
