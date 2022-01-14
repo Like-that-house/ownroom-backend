@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
-from .utils import s3client
+from .s3utils import s3client
 
 # Create your views here.
 
