@@ -221,6 +221,8 @@ class FileUploadView(APIView):
                 isReport=True
             )
             file.save()
+            contact.isReported = True
+            contact.save()
             return Response({"message": "컨설팅 보고서가 업로드되었습니다."}, status=status.HTTP_200_OK)
         # 컨설팅 신청서 작성
         else:
@@ -237,3 +239,20 @@ class FileUploadView(APIView):
             )
             file.save()
             return Response({"message": "컨설팅 신청서가 업로드되었습니다."}, status=status.HTTP_200_OK)
+
+
+class MyConsultingView(APIView):
+    def get(self, request):
+        user = request.user
+        #consultant인 경우
+        if user.isConsultant:
+            contact = Contact.objects.filter(consultant=user)
+            serializer = ContactSerializer(contact, many=True)
+            return Response(serializer.data)
+        #owner인 경우
+        else:
+            contact = Contact.objects.filter(owner=user)
+            serializer = ContactSerializer(contact, many=True)
+            return Response(serializer.data)
+
+

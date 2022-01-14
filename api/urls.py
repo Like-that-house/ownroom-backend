@@ -17,4 +17,5 @@ urlpatterns += [
     path('users/switch', UserSwitchView.as_view()),
     path('consulting/application/upload', FileUploadView.as_view()),
     path('consulting/report/upload', FileUploadView.as_view()),
+    path('consulting', MyConsultingView.as_view()),
 ]

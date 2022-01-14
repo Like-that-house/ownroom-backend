@@ -113,3 +113,10 @@ class PortfolioSerializer(serializers.ModelSerializer):
             'images',
             'user'
         ]
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ['owner', 'consultant', 'isReported', 'created_date']
+
