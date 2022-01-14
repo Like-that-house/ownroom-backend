@@ -12,6 +12,7 @@ from django.http import FileResponse, HttpResponse
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import mimetypes
+from .s3utils import s3client
 
 # Create your views here.
 
@@ -90,12 +91,14 @@ class PortfolioFilter(FilterSet):
         model=Portfolio
         fields=['concept']
 
+
 class PortfoliosViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Portfolio.objects.all()
     serializer_class = PortfolioSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = PortfolioFilter
+
 
 class ConsultingApplicationDownloadView(APIView):
     permission_classes = (AllowAny,)
@@ -190,3 +193,47 @@ class DownloadTest(APIView):
             response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % '테스트.docx'
             #os.remove('media/테스트.docx')
             return response
+
+
+class FileUploadView(APIView):
+    def get_user(self, id):
+        user = get_object_or_404(User, pk=id)
+        return user
+
+    def post(self, request, format=None):
+        user = request.user
+        filename = request.FILES['file']  # filename
+        targetId = request.POST['id']
+        # targetId = request.data.get("userId")
+        target = self.get_user(id=targetId)
+        urlpath = s3client.upload(filename)
+
+        if urlpath is None:
+            return Response({"message": "파일 업로드 실패"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 컨설팅 보고서 작성
+        if user.isConsultant:
+            contact = get_object_or_404(Contact, owner=target, consultant=user)
+            file = File(
+                contact=contact,
+                url=urlpath,
+                filename=filename,
+                isReport=True
+            )
+            file.save()
+            return Response({"message": "컨설팅 보고서가 업로드되었습니다."}, status=status.HTTP_200_OK)
+        # 컨설팅 신청서 작성
+        else:
+            contact = Contact(
+                owner=user,
+                consultant=target
+            )
+            contact.save()
+            file = File(
+                contact=Contact.objects.latest('id'),
+                url=urlpath,
+                filename=filename,
+                isReport=False
+            )
+            file.save()
+            return Response({"message": "컨설팅 신청서가 업로드되었습니다."}, status=status.HTTP_200_OK)
