@@ -92,7 +92,6 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True, # jwt 갱신 여부
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), # wt 토큰 유효기간
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), # jwt 토큰 갱신 유효기간
-    'AUTH_HEADER_TYPES': ('Bearer',), # 삭제하기
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
