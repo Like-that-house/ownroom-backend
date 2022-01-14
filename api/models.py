@@ -115,7 +115,7 @@ class Contact(Base):
     consultant = models.ForeignKey(User, related_name='owners', on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'contact_' + str(self.id) + '_from_' + str(self.user.nickname) + '_to_' + str(self.consultant.nickname)
+        return 'contact_' + str(self.id) + '_(owner:' + str(self.owner.nickname) + '/consultant:' + str(self.consultant.nickname)+')'
 
 class File(Base):
     class Meta:
@@ -134,7 +134,7 @@ class Image(Base):
         db_table="image"
 
     url = models.TextField()
-    portfolio = models.ForeignKey(Portfolio, related_name='images', on_delete=models.CASCADE)
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.CASCADE)
 
     def __str__(self):
         return 'image_' + str(self.id)

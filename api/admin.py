@@ -37,7 +37,7 @@ class UserChangeForm(forms.ModelForm):
    the user, but replaces the password field with admin's
    disabled password hash display field.
    """
-   password = ReadOnlyPasswordHashField()
+   #password = ReadOnlyPasswordHashField()
 
    class Meta:
        model = User
@@ -52,7 +52,7 @@ class UserAdmin(BaseUserAdmin):
    # The fields to be used in displaying the User model.
    # These override the definitions on the base UserAdmin
    # that reference specific fields on auth.User.
-   list_display = ('nickname', 'name', 'consultantRegisterStatus', 'is_admin', 'created_date', 'updated_date')
+   list_display = ('nickname', 'id','name', 'consultantRegisterStatus', 'is_admin', 'created_date', 'updated_date')
    list_filter = ('is_admin','consultantRegisterStatus')
    fieldsets = (
        (None, {'fields': ('nickname', 'password')}),
