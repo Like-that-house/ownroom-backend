@@ -2,7 +2,7 @@ from .views import *
 from rest_framework import routers
 from django.urls import path, include
 
-router = routers.DefaultRouter(trailing_slash=False)
+router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'portfolios', PortfoliosViewSet, basename='portfolio')
 urlpatterns = router.urls
@@ -17,5 +17,4 @@ urlpatterns += [
     path('users/switch', UserSwitchView.as_view()),
     path('consultings/application/upload', FileUploadView.as_view()),
     path('consultings/report/upload', FileUploadView.as_view()),
-    path('consulting', MyConsultingView.as_view()),
 ]
