@@ -15,7 +15,7 @@ urlpatterns += [
     path('consultings/test', DownloadTest.as_view()),
     path('users/check', DuplicationCheckView.as_view()),
     path('users/switch', UserSwitchView.as_view()),
-    path('consulting/application/upload', FileUploadView.as_view()),
-    path('consulting/report/upload', FileUploadView.as_view()),
+    path('consultings/application/upload', FileUploadView.as_view()),
+    path('consultings/report/upload', FileUploadView.as_view()),
     path('consulting', MyConsultingView.as_view()),
 ]
