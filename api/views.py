@@ -156,16 +156,16 @@ class ConsultingReportDownloadView(APIView):
         user = get_object_or_404(User, id=userId)
         isConsultant = user.isConsultant
 
-        # body로 넘겨받은 userId를 조회
+        # body로 넘겨받은 nickname으로 user 조회
         data = JSONParser().parse(request)
-        opponentUserId = data['userId']
+        opponent = User.objects.get(nickname=data['nickname'])
 
         if isConsultant:
             # 현재 컨설턴트 일 때
-            contact = get_object_or_404(Contact, consultant_id=userId, owner_id=opponentUserId)
+            contact = get_object_or_404(Contact, consultant_id=userId, owner=opponent)
         else:
             # 현재 오너 일 때
-            contact = get_object_or_404(Contact, owner_id=userId, consultant_id=opponentUserId )
+            contact = get_object_or_404(Contact, owner_id=userId, consultant=opponent)
 
         # 컨설팅 보고서(isReport = True)
         file = contact.files.get(isReport=True)
