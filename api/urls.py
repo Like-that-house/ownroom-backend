@@ -10,6 +10,7 @@ urlpatterns = router.urls
 urlpatterns += [
     path('users/signup', RegisterView.as_view()),
     path('users/login', LoginView.as_view()),
+    path('users/me', MyInfoView.as_view()),
     path('consultings/application/download', ConsultingApplicationDownloadView.as_view()),
     path('consultings/report/download', ConsultingReportDownloadView.as_view()),
     path('consultings/test', DownloadTest.as_view()),
@@ -17,5 +18,5 @@ urlpatterns += [
     path('users/switch', UserSwitchView.as_view()),
     path('consultings/application/upload', FileUploadView.as_view()),
     path('consultings/report/upload', FileUploadView.as_view()),
-    path('consulting', MyConsultingView.as_view()),
+    path('consultings', MyConsultingView.as_view()),
 ]

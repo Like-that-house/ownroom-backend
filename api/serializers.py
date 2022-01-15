@@ -17,9 +17,11 @@ User = get_user_model()
 
 # 회원가입
 class UserSerializer(serializers.ModelSerializer):
+    consultantRegisterStatus = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'nickname', 'name', 'phoneNumber', 'isConsultant', 'password']
+        fields = ['id', 'nickname', 'name', 'phoneNumber', 'isConsultant', 'consultantRegisterStatus', 'password']
 
     def validate(self, data):
         password = data.get('password')
@@ -39,6 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data.get("password"))
         user.save()
         return user
+
+    def get_consultantRegisterStatus(self, obj):
+        return obj.get_consultantRegisterStatus_display()
 
 # 로그인
 class UserLoginSerializer(serializers.ModelSerializer):
