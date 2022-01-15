@@ -29,6 +29,18 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class MyInfoView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JSONWebTokenAuthentication,)
+    def get(self, request):
+        jwt_value = JSONWebTokenAuthentication().get_jwt_value(request)
+        payload = JWT_DECODE_HANDLER(jwt_value)
+        userId = JWT_PAYLOAD_GET_USER_ID_HANDLER(payload)
+
+        user = User.objects.get(id=userId)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
 
 #회원가입
 class RegisterView(APIView):
@@ -101,7 +113,7 @@ class PortfoliosViewSet(viewsets.ModelViewSet):
 
 
 class ConsultingApplicationDownloadView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
     def post(self, request):
@@ -143,7 +155,7 @@ class ConsultingApplicationDownloadView(APIView):
             return response
 
 class ConsultingReportDownloadView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
     def post(self, request):
