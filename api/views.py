@@ -208,16 +208,16 @@ class DownloadTest(APIView):
 
 
 class FileUploadView(APIView):
-    def get_user(self, id):
-        user = get_object_or_404(User, pk=id)
+    def get_user(self, nickname):
+        user = get_object_or_404(User, nickname=nickname)
         return user
 
     def post(self, request, format=None):
         user = request.user
         filename = request.FILES['file']  # filename
-        targetId = request.POST['id']
-        # targetId = request.data.get("userId")
-        target = self.get_user(id=targetId)
+        target = request.POST['nickname']
+        # targetId = request.data.get("nickname")
+        target = self.get_user(nickname=target)
         urlpath = s3client.upload(filename)
 
         if urlpath is None:
