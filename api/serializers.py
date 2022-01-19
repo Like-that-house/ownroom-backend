@@ -121,7 +121,15 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField()
+    consultant = serializers.SerializerMethodField()
     class Meta:
         model = Contact
         fields = ['owner', 'consultant', 'isReported', 'created_date']
+
+    def get_owner(self, obj):
+        return obj.owner.nickname
+
+    def get_consultant(self, obj):
+        return obj.consultant.nickname
 
