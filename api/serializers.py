@@ -125,7 +125,7 @@ class ContactSerializer(serializers.ModelSerializer):
     consultant = serializers.SerializerMethodField()
     class Meta:
         model = Contact
-        fields = ['owner', 'owner', 'isReported', 'created_date']
+        fields = ['owner', 'consultant', 'isReported', 'created_date']
 
     def get_owner(self, obj):
         return obj.owner.nickname
