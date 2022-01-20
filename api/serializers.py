@@ -5,8 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import get_user_model
 from .models import *
-from .validators import validate_phone
-from django.contrib.auth.password_validation import validate_password
+from .validators import validated_password, validated_phone
 from django.core.exceptions import ValidationError
 
 # JWT 사용을 위한 설정
@@ -26,11 +25,10 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         password = data.get('password')
         phoneNumber = data.get('phoneNumber')
-        if validate_password(password):
-            raise serializers.ValidationError(detail=True)
-        if not validate_phone(phoneNumber):
-            raise serializers.ValidationError("Invalid phone number")
-        return data
+        errors = validated_password(password)
+        errors = validated_phone(phoneNumber, errors)
+        if errors:
+            raise serializers.ValidationError(errors)
 
     def create(self, validated_data):
         user = User(
