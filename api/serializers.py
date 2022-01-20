@@ -90,6 +90,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     concept = serializers.SerializerMethodField()
     consultingRange = serializers.SerializerMethodField()
+    numberOfRooms = serializers.SerializerMethodField()
     numberOfPossibleConsulting = serializers.SerializerMethodField()
 
     def get_user(self, obj):
@@ -100,6 +101,9 @@ class PortfolioSerializer(serializers.ModelSerializer):
 
     def get_consultingRange(self, obj):
         return obj.get_consultingRange_display()
+
+    def get_numberOfRooms(self, obj):
+        return obj.get_numberOfRooms_display()
 
     def get_numberOfPossibleConsulting(self, obj):
         return 3 - Contact.objects.filter(consultant=Portfolio.objects.get(id=obj.id).user).count()
