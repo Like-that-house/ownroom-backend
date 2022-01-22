@@ -13,6 +13,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import mimetypes
 from .s3utils import s3client
+import urllib
 
 # Create your views here.
 
@@ -116,7 +117,7 @@ class ConsultingApplicationDownloadView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
-    def post(self, request):
+    def get(self, request):
         # 현재 로그인한 계정의 userId를 불러옴
         jwt_value = JSONWebTokenAuthentication().get_jwt_value(request)
         payload = JWT_DECODE_HANDLER(jwt_value)
@@ -127,15 +128,14 @@ class ConsultingApplicationDownloadView(APIView):
         isConsultant = user.isConsultant
 
         # body로 넘겨받은 userId를 조회
-        data = JSONParser().parse(request)
-        opponentUserId = data['userId']
+        opponent = User.objects.get(nickname=self.request.query_params.get('nickname'))
 
         if isConsultant:
             # 현재 컨설턴트 일 때
-            contact = get_object_or_404(Contact, consultant_id=userId, owner_id=opponentUserId)
+            contact = get_object_or_404(Contact, consultant_id=userId, owner=opponent)
         else:
             # 현재 오너 일 때
-            contact = get_object_or_404(Contact, owner_id=userId, consultant_id=opponentUserId )
+            contact = get_object_or_404(Contact, owner_id=userId, consultant=opponent)
 
         # 컨설팅 신청서(isReport = False)
         file = contact.files.get(isReport=False)
@@ -146,19 +146,14 @@ class ConsultingApplicationDownloadView(APIView):
         client = boto3.client('s3')
         client.download_file(AWS_STORAGE_BUCKET_NAME, url, 'media/'+filename)
 
-        # 파일 Reponse
-        with open('media/'+filename, 'rb') as fh:
-            mime_type, _ = mimetypes.guess_type('media/'+filename)
-            response = HttpResponse(fh.read(), content_type=mime_type)
-            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % filename
-            os.remove('media/'+filename)
-            return response
+        # 다운로드 url return
+        return Response({"url": "https://api.ownroom.link/api/consultings/downloadUrl?filename={}".format(filename)},status=status.HTTP_200_OK)
 
 class ConsultingReportDownloadView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
-    def post(self, request):
+    def get(self, request):
         # 현재 로그인한 계정의 userId를 불러옴
         jwt_value = JSONWebTokenAuthentication().get_jwt_value(request)
         payload = JWT_DECODE_HANDLER(jwt_value)
@@ -168,9 +163,8 @@ class ConsultingReportDownloadView(APIView):
         user = get_object_or_404(User, id=userId)
         isConsultant = user.isConsultant
 
-        # body로 넘겨받은 nickname으로 user 조회
-        data = JSONParser().parse(request)
-        opponent = User.objects.get(nickname=data['nickname'])
+        # query parameter로 넘겨받은 nickname으로 user 조회
+        opponent = User.objects.get(nickname=self.request.query_params.get('nickname'))
 
         if isConsultant:
             # 현재 컨설턴트 일 때
@@ -188,21 +182,28 @@ class ConsultingReportDownloadView(APIView):
         client = boto3.client('s3')
         client.download_file(AWS_STORAGE_BUCKET_NAME, url, 'media/'+filename)
 
-        # 파일 Reponse
+        # 다운로드 url return
+        return Response({"url": "https://api.ownroom.link/api/consultings/downloadUrl?filename={}".format(filename)}, status=status.HTTP_200_OK)
+
+class DownloadView(APIView):
+    permission_classes = (AllowAny,)
+    def get(self, request):
+        filename = request.GET['filename']
         with open('media/'+filename, 'rb') as fh:
-            mime_type, _ = mimetypes.guess_type('media/'+filename)
+            mime_type,_ = mimetypes.guess_type('media/'+filename)
             response = HttpResponse(fh.read(), content_type=mime_type)
-            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % filename
+            quote_file_name = urllib.parse.quote(filename.encode('utf-8'))
+            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % quote_file_name
             os.remove('media/'+filename)
             return response
 
 class DownloadTest(APIView):
     permission_classes = (AllowAny,)
     def get(self, request):
-        with open('media/테스트.docx', 'rb') as fh:
-            mime_type,_ = mimetypes.guess_type('media/테스트.docx')
+        with open('media/컨설팅_보고서_이소이.docx', 'rb') as fh:
+            mime_type,_ = mimetypes.guess_type('media/컨설팅_보고서_이소이.docx')
             response = HttpResponse(fh.read(), content_type=mime_type)
-            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % '테스트.docx'
+            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % '컨설팅_보고서_이소이.docx'
             #os.remove('media/테스트.docx')
             return response
 

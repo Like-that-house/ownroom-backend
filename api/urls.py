@@ -19,4 +19,5 @@ urlpatterns += [
     path('consultings/application/upload', FileUploadView.as_view()),
     path('consultings/report/upload', FileUploadView.as_view()),
     path('consultings', MyConsultingView.as_view()),
+    path('consultings/downloadUrl', DownloadView.as_view())
 ]
