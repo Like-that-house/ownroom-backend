@@ -116,7 +116,7 @@ class ConsultingApplicationDownloadView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
-    def post(self, request):
+    def get(self, request):
         # 현재 로그인한 계정의 userId를 불러옴
         jwt_value = JSONWebTokenAuthentication().get_jwt_value(request)
         payload = JWT_DECODE_HANDLER(jwt_value)
@@ -127,15 +127,16 @@ class ConsultingApplicationDownloadView(APIView):
         isConsultant = user.isConsultant
 
         # body로 넘겨받은 userId를 조회
-        data = JSONParser().parse(request)
-        opponentUserId = data['userId']
+        #data = JSONParser().parse(request)
+        #opponentUserId = data['userId']
+        opponent = User.objects.get(nickname=self.request.query_params.get('nickname'))
 
         if isConsultant:
             # 현재 컨설턴트 일 때
-            contact = get_object_or_404(Contact, consultant_id=userId, owner_id=opponentUserId)
+            contact = get_object_or_404(Contact, consultant_id=userId, owner=opponent)
         else:
             # 현재 오너 일 때
-            contact = get_object_or_404(Contact, owner_id=userId, consultant_id=opponentUserId )
+            contact = get_object_or_404(Contact, owner_id=userId, consultant=opponent)
 
         # 컨설팅 신청서(isReport = False)
         file = contact.files.get(isReport=False)
@@ -158,7 +159,7 @@ class ConsultingReportDownloadView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 
-    def post(self, request):
+    def get(self, request):
         # 현재 로그인한 계정의 userId를 불러옴
         jwt_value = JSONWebTokenAuthentication().get_jwt_value(request)
         payload = JWT_DECODE_HANDLER(jwt_value)
@@ -168,9 +169,10 @@ class ConsultingReportDownloadView(APIView):
         user = get_object_or_404(User, id=userId)
         isConsultant = user.isConsultant
 
-        # body로 넘겨받은 nickname으로 user 조회
-        data = JSONParser().parse(request)
-        opponent = User.objects.get(nickname=data['nickname'])
+        # query parameter로 넘겨받은 nickname으로 user 조회
+        #data = JSONParser().parse(request)
+        #opponent = User.objects.get(nickname=data['nickname'])
+        opponent = User.objects.get(nickname=self.request.query_params.get('nickname'))
 
         if isConsultant:
             # 현재 컨설턴트 일 때
