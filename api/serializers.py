@@ -29,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         errors = validated_phone(phoneNumber, errors)
         if errors:
             raise serializers.ValidationError(errors)
+        return data
 
     def create(self, validated_data):
         user = User(
