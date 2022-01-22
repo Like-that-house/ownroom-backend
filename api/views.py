@@ -238,6 +238,9 @@ class FileUploadView(APIView):
             return Response({"message": "컨설팅 보고서가 업로드되었습니다."}, status=status.HTTP_200_OK)
         # 컨설팅 신청서 작성
         else:
+            contact = Contact.objects.filter(owner=user, consultant=target)
+            if contact.exists():
+                return Response({"message": "이미 컨택이 진행되었습니다."}, status=status.HTTP_400_BAD_REQUEST)
             contact = Contact(
                 owner=user,
                 consultant=target
