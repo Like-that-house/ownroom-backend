@@ -4,10 +4,10 @@
   <br><br>
 </div>
 <p align="center">
-	<a href="https://github.com/Like-that-house/ownroom-backend/search?l=TSX&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/facade-team/sogang-register-web"></a>
-	<a href="https://github.com/Like-that-house/ownroom-backend/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/facade-team/sogang-register-web?color=success"></a>
-	<a href="https://github.com/Like-that-house/ownroom-backend/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/facade-team/sogang-register-web"></a>
-	<a href="https://github.com/Like-that-house/ownroom-backend/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/facade-team/sogang-register-web"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/search?l=TSX&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Like-that-house/ownroom-backend"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Like-that-house/ownroom-backend?color=success"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Like-that-house/ownroom-backend"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/Like-that-house/ownroom-backend"></a>
 </p>
 
 ---
