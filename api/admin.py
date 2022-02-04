@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
 from .models import *
@@ -37,8 +36,6 @@ class UserChangeForm(forms.ModelForm):
    the user, but replaces the password field with admin's
    disabled password hash display field.
    """
-   #password = ReadOnlyPasswordHashField()
-
    class Meta:
        model = User
        fields = ('nickname', 'password', 'name', 'phoneNumber', 'consultantRegisterStatus', 'is_active', 'is_admin')

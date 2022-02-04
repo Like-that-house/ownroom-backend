@@ -8,8 +8,7 @@ from rest_framework.generics import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 import boto3
 from ownroom.settings import *
-from django.http import FileResponse, HttpResponse
-from rest_framework.parsers import MultiPartParser, JSONParser
+from django.http import HttpResponse
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 import mimetypes
 from .s3utils import s3client
@@ -197,17 +196,6 @@ class DownloadView(APIView):
             os.remove('media/'+filename)
             return response
 
-class DownloadTest(APIView):
-    permission_classes = (AllowAny,)
-    def get(self, request):
-        with open('media/컨설팅_보고서_이소이.docx', 'rb') as fh:
-            mime_type,_ = mimetypes.guess_type('media/컨설팅_보고서_이소이.docx')
-            response = HttpResponse(fh.read(), content_type=mime_type)
-            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'%s' % '컨설팅_보고서_이소이.docx'
-            #os.remove('media/테스트.docx')
-            return response
-
-
 class FileUploadView(APIView):
     def get_user(self, nickname):
         user = get_object_or_404(User, nickname=nickname)
@@ -270,5 +258,3 @@ class MyConsultingView(APIView):
             contact = Contact.objects.filter(owner=user)
             serializer = ContactSerializer(contact, many=True)
             return Response(serializer.data)
-
-
