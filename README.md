@@ -3,6 +3,14 @@
   <img src="https://user-images.githubusercontent.com/90975718/152309514-baaaa97a-b07e-400e-8462-12256c7a05ea.png">
   <br><br>
 </div>
+<p align="center">
+	<a href="https://github.com/Like-that-house/ownroom-backend/search?l=TSX&type=code"><img alt="GitHub language count" src="https://img.shields.io/github/languages/count/facade-team/sogang-register-web"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/facade-team/sogang-register-web?color=success"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/facade-team/sogang-register-web"></a>
+	<a href="https://github.com/Like-that-house/ownroom-backend/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/facade-team/sogang-register-web"></a>
+</p>
+
+---
 
 **1인 가구**에게 알맞은 일대일 **인테리어 컨설팅 서비스**
 
@@ -62,5 +70,5 @@ https://documenter.getpostman.com/view/15075181/UVXdQf4K
 | <img src ="https://avatars.githubusercontent.com/u/62752488?v=4" width = 150/> |                 <img src ="https://avatars.githubusercontent.com/u/48646015?v=4" width = 150/>                 | <img src ="https://avatars.githubusercontent.com/u/90975718?v=4" width = 150/> |
 | :----------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
 |                                     구본준                                     |                                                     김승우                                                     |                                     김윤지                                     |
-|                           <a href ="">@bonjunku</a>                            | <a href ="https://github.com/Like-that-house/django-vote-14th/commits?author=seungwooKim99">@seungwookim99</a> |               <a href ="https://github.com/yoonjiy">@yoonjiy</a>               |
+|                           <a href ="">@bonjunku</a>                            | <a href ="https://github.com/seungwooKim99">@seungwookim99</a> |               <a href ="https://github.com/yoonjiy">@yoonjiy</a>               |
 |                                   프론트엔드                                   |                                                     백엔드                                                     |                                     백엔드                                     |
